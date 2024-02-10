@@ -218,12 +218,19 @@ GraspitCore::GraspitCore(int argc, char **argv):
 
   if (args->exist("robot"))
   {
-    QString filename = graspitRoot +
+    std::string robot = args->get<std::string>("robot");
+    std::cout<<"Heyyy!"<<robot<<std::endl;
+    QString filename;
+    if (robot.find("/") != std::string::npos) {
+      filename =  QString::fromStdString(args->get<std::string>("robot"));
+    } else {
+      filename = graspitRoot +
                        QString("/models/robots/") +
                        QString::fromStdString(args->get<std::string>("robot")) +
                        QString("/") +
                        QString::fromStdString(args->get<std::string>("robot")) +
                        QString(".xml");
+    }                   
     if (world->importRobot(filename) == NULL) {
       ++errorFlag;
     }
